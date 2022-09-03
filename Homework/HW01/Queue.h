@@ -2,8 +2,6 @@
 #ifndef _QUEUE_H
 #define _QUEUE_H
 
-#include <iostream>
-
 template <class T>
 class Queue
 {
