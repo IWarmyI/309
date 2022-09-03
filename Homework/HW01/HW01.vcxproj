@@ -172,9 +172,11 @@
     <ResourceCompile Include="..\..\res\ICON.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alberto.h" />
     <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Alberto.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

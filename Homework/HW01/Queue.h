@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _QUEUE_H
 #define _QUEUE_H
 
@@ -77,6 +78,8 @@ public:
 		current++;
 		//add data to queue
 		queueArr[current] = data;
+		//sort current data in queue if more than 1 item
+		sort();
 	}
 
 	//find first added element and remove from queue
@@ -153,7 +156,22 @@ public:
 	//sort queue array in ascending order
 	void sort()
 	{
+		//store temp variable if needed
+		T temp;
 
+		//move through queue and reorder to ascending
+		for (int i = 0; i < current; i++)
+		{
+			for (int j = i + 1; j <= current; j++)
+			{
+				if (queueArr[i] > queueArr[j])
+				{
+					temp = queueArr[i];
+					queueArr[i] = queueArr[j];
+					queueArr[j] = temp;
+				}
+			}
+		}
 	}
 
 private:

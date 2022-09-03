@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Queue.h"
+#include "Alberto.h"
 
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -16,6 +17,7 @@ int main()
 	Queue<int> intQueue = Queue<int>();
 	Queue<char> charQueue = Queue<char>();
 	Queue<double> doubleQueue = Queue<double>();
+	Queue<AlbertoClass> albertoQueue = Queue<AlbertoClass>();
 
 	//int
 	cout << "------Ints------" << endl << endl;
@@ -28,6 +30,7 @@ int main()
 	intQueue.push(5);
 	intQueue.push(2);
 	intQueue.push(10);
+	intQueue.push(1);
 
 	//check if empty
 	cout << "Is the int queue empty? " << intQueue.isEmpty() << endl << endl;
@@ -120,6 +123,24 @@ int main()
 	doubleQueue.print();
 	cout << endl;
 
-	//use to view exe files
-	getchar();
+	//alberto
+	cout << "------Albertos------" << endl << endl;
+
+	//push data
+	albertoQueue.push(AlbertoClass(84));
+	albertoQueue.push(AlbertoClass());
+	albertoQueue.push(AlbertoClass(23));
+	
+	//print queue
+	cout << "------Printing Queue------" << endl;
+	albertoQueue.print();
+	cout << endl;
+	//pop data off queue
+	cout << "Removing Data from Queue..." << endl << endl;
+	albertoQueue.pop();
+
+	//print queue
+	cout << "------Printing Queue------" << endl;
+	albertoQueue.print();
+	cout << endl;
 }
