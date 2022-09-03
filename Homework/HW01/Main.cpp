@@ -119,4 +119,7 @@ int main()
 	cout << "------Printing Queue------" << endl;
 	doubleQueue.print();
 	cout << endl;
+
+	//use to view exe files
+	getchar();
 }

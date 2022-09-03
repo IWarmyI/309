@@ -169,15 +169,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\include\OpenGL-Tutorials\shader.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\OpenGL-Tutorials\shader.hpp" />
-    <ClInclude Include="Main.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="..\..\res\ICON.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Queue.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

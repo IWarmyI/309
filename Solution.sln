@@ -13,26 +13,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HW01", "Homework\HW01\HW01.
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Debug|x64.ActiveCfg = Debug|x64
-		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Debug|x64.Build.0 = Debug|x64
 		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Debug|x86.ActiveCfg = Debug|Win32
 		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Debug|x86.Build.0 = Debug|Win32
-		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Release|x64.ActiveCfg = Release|x64
-		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Release|x64.Build.0 = Release|x64
 		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Release|x86.ActiveCfg = Release|Win32
 		{B8157A5E-561C-4B6B-9FD2-323EF59173FC}.Release|x86.Build.0 = Release|Win32
-		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Debug|x64.ActiveCfg = Debug|x64
-		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Debug|x64.Build.0 = Debug|x64
 		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Debug|x86.ActiveCfg = Debug|Win32
 		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Debug|x86.Build.0 = Debug|Win32
-		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Release|x64.ActiveCfg = Release|x64
-		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Release|x64.Build.0 = Release|x64
 		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Release|x86.ActiveCfg = Release|Win32
 		{09AD1517-9D69-4ED6-BB25-20F72E2B7DBE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
