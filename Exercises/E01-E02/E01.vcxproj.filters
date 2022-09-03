@@ -18,7 +18,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\OpenGL-Tutorials\shader.cpp">
+    <ClCompile Include="..\..\include\OpenGL-Tutorials\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,12 +26,12 @@
     <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\OpenGL-Tutorials\shader.hpp">
+    <ClInclude Include="..\..\include\OpenGL-Tutorials\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\res\ICON.rc">
+    <ResourceCompile Include="..\..\res\ICON.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
