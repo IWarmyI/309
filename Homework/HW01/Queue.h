@@ -1,3 +1,8 @@
+/*
+* Name: Darvin Muralitharan
+* Date: 09/02/22
+* Description: Template priority queue
+*/
 #pragma once
 #ifndef _QUEUE_H
 #define _QUEUE_H
