@@ -7,7 +7,6 @@ Date : 2018 / 01
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "ShaderCompiler.h"
 
 #include <SFML/Window.hpp>
@@ -26,11 +25,11 @@ class AppClass
 	std::string m_sWindowName = ""; //window name
 	sf::Window* m_pWindow = nullptr; //SFML window
 	GLuint m_uShaderProgramID = 0; //Shader program
-	GLuint m_uVAO = 0; //Vertes Array Object
+	GLuint m_uVAO = 0; //Vertex Array Object
 	GLuint m_uVBO = 0; //Vertex Buffer Object
 	
 	glm::vec3 m_v3Color = glm::vec3(-1.0f); //Color of shape
-	bool m_bComplimentary = true; //Complimentary color
+	bool complimentary = false;
 
 	bool m_bRunning = true; //Running Flag
 		
@@ -119,7 +118,6 @@ private:
 	OUTPUT: ---
 	*/
 	void ProcessKeyboard(sf::Event a_event);
-
 };
 
 #endif //__SFMLAPPCLASS_H_

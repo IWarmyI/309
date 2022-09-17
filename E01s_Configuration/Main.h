@@ -1,10 +1,22 @@
 /*--------------------------------------------------------------------------------------------------
-This project was generated in 2018
+This project was generated in 2013
 --------------------------------------------------------------------------------------------------*/
-#ifndef __MAIN_H_
-#define __MAIN_H_
+#ifndef _MAIN_H
+#define _MAIN_H
 
+// Include standard headers
+#include <Windows.h>
 #include <iostream>
-#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#endif //__MAIN_H_
+
+#include "GL\glew.h"
+#include "GLFW\glfw3.h"
+
+#include "GLM\glm.hpp"
+
+#include "OpenGL-Tutorials\shader.hpp"
+
+
+#endif //_MAIN_H

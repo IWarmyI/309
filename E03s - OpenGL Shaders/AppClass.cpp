@@ -67,7 +67,7 @@ void AppClass::InitOpenGL(void)
 }
 void AppClass::InitShaders(void)
 {
-	m_uShaderProgramID = LoadShaders("Shaders//BasicColor.vs", "Shaders//BasicColorInvert.fs");
+	m_uShaderProgramID = LoadShaders("Shaders//BasicColor.vs", "Shaders//E03BasicColor.fs");
 	glUseProgram(m_uShaderProgramID);
 }
 void AppClass::InitVariables(void)
@@ -105,9 +105,9 @@ void AppClass::InitVariables(void)
 }
 void AppClass::ProcessKeyboard(sf::Event a_event)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	if (a_event.key.code == sf::Keyboard::Key::Escape)//Event says I pressed the Escape key
 		m_bRunning = false;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) //I am currently pressing the Num1 (not the same as above)
 		m_v3Color = glm::vec3(1.0f, 0.0f, 0.0f);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 		m_v3Color = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -115,13 +115,9 @@ void AppClass::ProcessKeyboard(sf::Event a_event)
 		m_v3Color = glm::vec3(0.0f, 0.0f, 1.0f);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 		m_v3Color = glm::vec3(-1.0f, -1.0f, -1.0f);
-
-	if (a_event.key.code == sf::Keyboard::Key::C)
-	{
-		m_bComplimentary = !m_bComplimentary;
-	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))//toggle compliment with Num4
+		complimentary = !complimentary;
 }
-
 void AppClass::Display(void)
 {
 	// clear the buffers
@@ -131,8 +127,8 @@ void AppClass::Display(void)
 	GLuint SolidColor = glGetUniformLocation(m_uShaderProgramID, "SolidColor");
 	glUniform3f(SolidColor, m_v3Color.r, m_v3Color.g, m_v3Color.b);
 
-	GLuint Complimentary = glGetUniformLocation(m_uShaderProgramID, "Complimentary");
-	glUniform1i(Complimentary, m_bComplimentary);
+	GLuint Compliment = glGetUniformLocation(m_uShaderProgramID, "Compliment");
+	glUniform1i(Compliment, complimentary);
 
 	//draw content
 	glDrawArrays(GL_TRIANGLES, 0, 3);
