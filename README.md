@@ -1,4 +1,2 @@
-# 309
-RIT IGME-309 Fall 2022 Repo
+# IGME309-2215
 
-All of my work for IGME-309
