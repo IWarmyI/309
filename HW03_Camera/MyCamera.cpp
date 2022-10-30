@@ -14,32 +14,43 @@ void MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3 a_v3Targ
 }
 void MyCamera::MoveForward(float a_fDistance)
 {
-	//Tips:: Moving will modify both positional and directional vectors,
-	//		 here we only modify the positional.
-	//       The code below "works" because we wrongly assume the forward 
-	//		 vector is going in the global -Z but if you look at the demo 
-	//		 in the _Binary folder you will notice that we are moving 
-	//		 backwards and we never get closer to the plane as we should 
-	//		 because as we are looking directly at it.
-	m_v3Position += vector3(0.0f, 0.0f, a_fDistance);
-	m_v3Target += vector3(0.0f, 0.0f, a_fDistance);
+	// goes forward based on line of sight
+
+	// moves camera foward/backward
+	m_v3Position += m_v3Forward * a_fDistance;
+	// update target to prevent camera lock
+	m_v3Target += m_v3Forward * a_fDistance;
 }
 void MyCamera::MoveVertical(float a_fDistance)
 {
-	//Tip:: Look at MoveForward
+	// moves camera up/down
+	m_v3Position += m_v3Upward * a_fDistance;
+	// update target to prevent camera lock
+	m_v3Target += m_v3Upward * a_fDistance;
 }
 void MyCamera::MoveSideways(float a_fDistance)
 {
-	//Tip:: Look at MoveForward
+	// moves camera left/right
+	m_v3Position += m_v3Rightward * a_fDistance;
+	// update target to prevent camera lock
+	m_v3Target += m_v3Rightward * a_fDistance;
 }
 void MyCamera::CalculateView(void)
 {
-	//Tips:: Directional vectors will be affected by the orientation in the quaternion
-	//		 After calculating any new vector one needs to update the View Matrix
-	//		 Camera rotation should be calculated out of the m_v3PitchYawRoll member
-	//		 it will receive information from the main code on how much these orientations
-	//		 have change so you only need to focus on the directional and positional 
-	//		 vectors. There is no need to calculate any right click process or connections.
+	// clamp pitch to prevent looking perfectly up/down
+	m_v3PitchYawRoll.x = glm::clamp(m_v3PitchYawRoll.x, glm::radians(-89.0f), glm::radians(89.0f));
+
+	// translate values
+	quaternion rotate = quaternion(m_v3PitchYawRoll);
+
+	// rotate direction vectors
+	m_v3Upward = glm::rotate(rotate, AXIS_Y);
+	m_v3Forward = glm::rotate(rotate, -AXIS_Z);
+	m_v3Rightward = glm::rotate(rotate, AXIS_X);
+
+	// update target vector
+	m_v3Target = m_v3Position + m_v3Forward;
+
 	m_m4View = glm::lookAt(m_v3Position, m_v3Target, m_v3Upward);
 }
 //You can assume that the code below does not need changes unless you expand the functionality
