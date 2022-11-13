@@ -132,7 +132,34 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 			this->RemoveCollisionWith(a_pOther);
 			a_pOther->RemoveCollisionWith(this);
 
-			// made multiple results but couldn't generate planes
+			matrix4 plane = IDENTITY_M4;
+			matrix4 scale = glm::scale(vector3(4.0f, 4.0f, 0.0f));
+			matrix4 rotate;
+			matrix4 translate;
+
+			// planes not correctly rotated
+
+			// x axis separation
+			if (nResult == 1 || nResult == 4 || nResult == 7 || nResult == 8 || nResult == 9)
+			{
+				rotate = glm::rotate(glm::radians(0.0f), a_pOther->GetCenterGlobal());
+				translate = glm::translate((this->GetCenterGlobal() + a_pOther->GetCenterGlobal()) / 2);
+				m_pModelMngr->AddPlaneToRenderList(plane * translate * rotate * scale, C_RED);
+			}
+			// y axis separation
+			else if (nResult == 2 || nResult == 5 || nResult == 10 || nResult == 11 || nResult == 12)
+			{
+				rotate = glm::rotate(glm::radians(0.0f), a_pOther->GetCenterGlobal());
+				translate = glm::translate((this->GetCenterGlobal() + a_pOther->GetCenterGlobal()) / 2);
+				m_pModelMngr->AddPlaneToRenderList(plane * translate * rotate * scale, C_GREEN);
+			}
+			// z axis separation
+			else
+			{
+				rotate = glm::rotate(glm::radians(0.0f), a_pOther->GetCenterGlobal());
+				translate = glm::translate((this->GetCenterGlobal() + a_pOther->GetCenterGlobal()) / 2);
+				m_pModelMngr->AddPlaneToRenderList(plane * translate * rotate * scale, C_BLUE);
+			}
 		}
 	}
 	else //they are not colliding with bounding sphere
