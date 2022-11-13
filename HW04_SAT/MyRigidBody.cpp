@@ -3,15 +3,116 @@ using namespace BTX;
 //Allocation
 uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 {
-	//TODO: Calculate the SAT algorithm I STRONGLY suggest you use the
-	//Real Time Collision detection algorithm for OBB here but feel free to
-	//implement your own solution.
+	MyRigidBody* a = this;
+	MyRigidBody* b = a_pOther;
+
+	float ra, rb;
+	matrix3 R, AbsR;
+
+	// Compute rotation matrix expressing b in a coordinate frame
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			R[i][j] = glm::dot(a->m_m4ToWorld[i], b->m_m4ToWorld[j]);
+
+	// Compute translation vector t
+	vector3 t = b->GetCenterGlobal() - a->GetCenterGlobal();
+	// Bring translation into a coordinate frame
+	t = vector3(glm::dot(t, vector3(a->m_m4ToWorld[0])),
+		glm::dot(t, vector3(a->m_m4ToWorld[1])),
+		glm::dot(t, vector3(a->m_m4ToWorld[2])));
+
+	// Compute common subexpressions. Add in an epsilon term to
+	// counteract arithmetic errors when two edges are parallel and
+	// their cross product is (near) null (see text for details)
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			AbsR[i][j] = glm::abs(R[i][j]) + FLT_EPSILON;
+
+	// Check each separating axis
+
+	// AX
+	ra = this->m_v3HalfWidth[0];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[0][0] + a_pOther->m_v3HalfWidth[1] * AbsR[0][1] + a_pOther->m_v3HalfWidth[2] * AbsR[0][2];
+	if (glm::abs(t[0]) > ra + rb) return BTXs::eSATResults::SAT_AX;
+
+	// AY
+	ra = this->m_v3HalfWidth[1];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[1][0] + a_pOther->m_v3HalfWidth[1] * AbsR[1][1] + a_pOther->m_v3HalfWidth[2] * AbsR[1][2];
+	if (glm::abs(t[1]) > ra + rb) return BTXs::eSATResults::SAT_AY;
+
+	// AZ
+	ra = this->m_v3HalfWidth[2];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[2][0] + a_pOther->m_v3HalfWidth[1] * AbsR[2][1] + a_pOther->m_v3HalfWidth[2] * AbsR[2][2];
+	if (glm::abs(t[2]) > ra + rb) return BTXs::eSATResults::SAT_AZ;
+
+	// BX
+	ra = this->m_v3HalfWidth[0] * AbsR[0][0] + this->m_v3HalfWidth[1] * AbsR[1][0] + this->m_v3HalfWidth[2] * AbsR[2][0];
+	rb = a_pOther->m_v3HalfWidth[0];
+	if (glm::abs(t[0] * R[0][0] + t[1] * R[1][0] + t[2] * R[2][0]) > ra + rb) return BTXs::eSATResults::SAT_BX;
+
+	// BY
+	ra = this->m_v3HalfWidth[0] * AbsR[0][1] + this->m_v3HalfWidth[1] * AbsR[1][1] + this->m_v3HalfWidth[2] * AbsR[2][1];
+	rb = a_pOther->m_v3HalfWidth[1];
+	if (glm::abs(t[0] * R[0][1] + t[1] * R[1][1] + t[2] * R[2][1]) > ra + rb) return BTXs::eSATResults::SAT_BY;
+
+	// BZ
+	ra = this->m_v3HalfWidth[0] * AbsR[0][2] + this->m_v3HalfWidth[1] * AbsR[1][2] + this->m_v3HalfWidth[2] * AbsR[2][2];
+	rb = a_pOther->m_v3HalfWidth[2];
+	if (glm::abs(t[0] * R[0][2] + t[1] * R[1][2] + t[2] * R[2][2]) > ra + rb) return BTXs::eSATResults::SAT_BZ;
+
+	// AX x BX
+	ra = this->m_v3HalfWidth[1] * AbsR[2][0] + this->m_v3HalfWidth[2] * AbsR[1][0];
+	rb = a_pOther->m_v3HalfWidth[1] * AbsR[0][2] + a_pOther->m_v3HalfWidth[2] * AbsR[0][1];
+	if (glm::abs(t[2] * R[1][0] - t[1] * R[2][0]) > ra + rb) return BTXs::eSATResults::SAT_AXxBX;
+
+	// AX x BY
+	ra = this->m_v3HalfWidth[1] * AbsR[2][1] + this->m_v3HalfWidth[2] * AbsR[1][1];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[0][2] + a_pOther->m_v3HalfWidth[2] * AbsR[0][0];
+	if (glm::abs(t[2] * R[1][1] - t[1] * R[2][1]) > ra + rb) return BTXs::eSATResults::SAT_AXxBY;
+
+	// AX x BZ
+	ra = this->m_v3HalfWidth[1] * AbsR[2][2] + this->m_v3HalfWidth[2] * AbsR[1][2];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[0][1] + a_pOther->m_v3HalfWidth[1] * AbsR[0][0];
+	if (glm::abs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb) return BTXs::eSATResults::SAT_AXxBZ;
+
+	// AY x BX
+	ra = this->m_v3HalfWidth[0] * AbsR[2][0] + this->m_v3HalfWidth[2] * AbsR[0][0];
+	rb = a_pOther->m_v3HalfWidth[1] * AbsR[1][2] + a_pOther->m_v3HalfWidth[2] * AbsR[1][1];
+	if (glm::abs(t[0] * R[2][0] - t[2] * R[0][0]) > ra + rb) return BTXs::eSATResults::SAT_AYxBX;
+
+	// AY x BY
+	ra = this->m_v3HalfWidth[0] * AbsR[2][1] + this->m_v3HalfWidth[2] * AbsR[0][1];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[1][2] + a_pOther->m_v3HalfWidth[2] * AbsR[1][0];
+	if (glm::abs(t[0] * R[2][1] - t[2] * R[0][1]) > ra + rb) return BTXs::eSATResults::SAT_AYxBY;
+
+	// AY x BZ
+	ra = this->m_v3HalfWidth[0] * AbsR[2][2] + this->m_v3HalfWidth[2] * AbsR[0][2];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[1][1] + a_pOther->m_v3HalfWidth[1] * AbsR[1][0];
+	if (glm::abs(t[0] * R[2][2] - t[2] * R[0][2]) > ra + rb) return BTXs::eSATResults::SAT_AYxBZ;
+
+	// AZ x BX
+	ra = this->m_v3HalfWidth[0] * AbsR[1][0] + this->m_v3HalfWidth[1] * AbsR[0][0];
+	rb = a_pOther->m_v3HalfWidth[1] * AbsR[2][2] + a_pOther->m_v3HalfWidth[2] * AbsR[2][1];
+	if (glm::abs(t[1] * R[0][0] - t[0] * R[1][0]) > ra + rb) return BTXs::eSATResults::SAT_AZxBX;
+
+	// AZ x BY
+	ra = this->m_v3HalfWidth[0] * AbsR[1][1] + this->m_v3HalfWidth[1] * AbsR[0][1];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[2][2] + a_pOther->m_v3HalfWidth[2] * AbsR[2][0];
+	if (glm::abs(t[1] * R[0][1] - t[0] * R[1][1]) > ra + rb) return BTXs::eSATResults::SAT_AZxBY;
+
+	// AZ x BZ
+	ra = this->m_v3HalfWidth[0] * AbsR[1][2] + this->m_v3HalfWidth[1] * AbsR[0][2];
+	rb = a_pOther->m_v3HalfWidth[0] * AbsR[2][1] + a_pOther->m_v3HalfWidth[1] * AbsR[2][0];
+	if (glm::abs(t[1] * R[0][2] - t[0] * R[1][2]) > ra + rb) return BTXs::eSATResults::SAT_AZxBZ;
+
+	// No separating axis found
 	return BTXs::eSATResults::SAT_NONE;
+
 }
 bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 {
 	//check if spheres are colliding
-	bool bColliding = true;
+	bool bColliding = true;// (glm::distance(GetCenterGlobal(), a_pOther->GetCenterGlobal()) < m_fRadius + a_pOther->m_fRadius);
 	/*
 	* We use Bounding Spheres or ARBB as a pre-test to avoid expensive calculations (SAT)
 	* we default bColliding to true here to always fall in the need of calculating
@@ -21,7 +122,7 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 	{
 		uint nResult = SAT(a_pOther);
 
-		if (bColliding) //The SAT shown they are colliding
+		if (nResult == 0) //The SAT shown they are colliding
 		{
 			this->AddCollisionWith(a_pOther);
 			a_pOther->AddCollisionWith(this);
@@ -30,6 +131,8 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 		{
 			this->RemoveCollisionWith(a_pOther);
 			a_pOther->RemoveCollisionWith(this);
+
+			// made multiple results but couldn't generate planes
 		}
 	}
 	else //they are not colliding with bounding sphere
